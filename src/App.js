@@ -3,17 +3,19 @@ import { useState } from 'react'
 import Title from './components/Title'
 import Modal from './components/Modal'
 import EventList from './components/EventList'
+import NewEventForm from './components/NewEventForm'
 
 function App() {
   const [showModal, setShowModal] = useState(true)
   const [showEvents, setShowEvents] = useState(true)
-  const [events, setEvents] = useState([
-    {title: "Big boy", id: 1},
-    {title: "Small boy", id: 2},
-    {title: "The BOY", id: 3}
-  ])
+  const [events, setEvents] = useState([])
 
-  console.log(showModal)
+  const addEvent = (event) => {
+    setEvents((prevEvents) => {
+      return [...prevEvents, event]
+    })
+    setShowModal(false)
+  }
 
   const handleClick = (id) => {
     setEvents((prevEvents) => {
@@ -22,10 +24,6 @@ function App() {
       })
     })
     console.log(id)
-  }
-
-  const handleClose = () => {
-    setShowModal(false)
   }
 
   const subtitle = "All the latest events in Marioland"
@@ -47,21 +45,15 @@ function App() {
       )}
      {showEvents && <EventList events={events} handleClick={handleClick}/>}
 
-      {/* <Modal>
-        <h2>10% Off Coupon Code!!</h2>
-        <p>Use the code NINJA10 at the checkout.</p>
-      </Modal> */}
-      {showModal && (
-        <div>
-          <button onClick={() => setShowModal(false)}>Show Modal</button>
-        </div>
+     {showModal && (
+        <Modal>
+          <NewEventForm addEvent={addEvent} />
+        </Modal>
       )}
-      {!showModal && <Modal handleClose={handleClose} isSalesModal={true}>
-        <h2>Terms and conditions</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus itaque dolore nihil omnis, odio, sit corporis unde veritatis, 
-        illum quidem totam deleniti ipsam asperiores cumque laborum officia rerum! Obcaecati, blanditiis!</p>
-        <button onClick={() => setShowModal(true)}>Hide Modal</button>
-      </Modal>}
+
+      <div>
+        <button onClick={() => setShowModal(true)}>Add New Event</button>
+      </div>
     </div>
   );
 }
